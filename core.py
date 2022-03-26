@@ -23,15 +23,14 @@ class Matrix():
         for i in range(len(self.data)):
             for j in range(len(self.data[0])):
                 l[j][i] = self.data[i][j]
-        self.data = l
-        return self
+        return Matrix().fromlist(l)
     def dot(self,b):
         l = []
         for _ in range(len(self.data)):
             l.append(len(b.data[0])*[0][:])
         for i in range(len(l)):
-            for j in range(len(l[i])):
-                for k in range(len(b.data)):
+            for j in range(len(l[0])):
+                for k in range(len(b.data[0])):
                     l[i][j] += self.data[i][k]*b.data[k][j]
         return Matrix().fromlist(l)
     def show(self,file=sys.stdout):
