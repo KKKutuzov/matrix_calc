@@ -1,5 +1,4 @@
 import sys
-import copy
 class Matrix():
     def __init__(self):
         self.data = []
@@ -7,7 +6,8 @@ class Matrix():
         self.data = []
         with open(inputfile,'r') as f:
             for line in f:
-                self.data.append(list(map(int,line.split())))
+                if len(list(map(int,line.split()))) != 0:
+                    self.data.append(list(map(int,line.split())))
         return self
     def tofile(self,outputfile,ty):
          with open(outputfile,ty) as f:
@@ -17,9 +17,11 @@ class Matrix():
         self.data = l
         return self
     def T(self):
-        l  = copy.deepcopy(self.data)
-        for i in range(len(l)):
-            for j in range(len(l[0])):
+        l = []
+        for _ in range(len(self.data[0])):
+            l.append(len(self.data)*[0])
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
                 l[j][i] = self.data[i][j]
         self.data = l
         return self
