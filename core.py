@@ -1,4 +1,5 @@
 from sys import stdin
+import math
 from copy import deepcopy
 class Matrix():
     def __init__(self, list_of_lists=None):
@@ -21,6 +22,15 @@ class Matrix():
         
     def __eq__(self, other):
         return self.data == other.data
+    
+    def getrow(self,indx):
+        return Matrix([self.data[indx]])
+    
+    def getcolumn(self,indx):
+        l = [[0] for i in range(self.shape()[1])]
+        for i in range(len(l)):
+            l[i][0] = self.data[i][indx]
+        return Matrix(l)
     
     def __add__(self, other):
         other = Matrix(other)
@@ -62,6 +72,13 @@ class Matrix():
                 for k in range(len(other.data)):
                     l[i][j] += self.data[i][k]*other.data[k][j]
         return Matrix(l)
+    
+    def norm(self):
+        answer = 0
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                answer += self.data[i][j]**2
+        return math.sqrt(answer)
     
     def T(self):
         l = []
