@@ -1,1 +1,1 @@
-## Python prcatics with matrix
+## Python practics with matrix
