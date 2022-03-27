@@ -32,8 +32,12 @@ class Matrix():
             l[i][0] = self.data[i][indx]
         return Matrix(l)
     
-    def setcolumn(self,col,indx):
+    def setrow(self,row,indx):
         for i in range(len(self.data[indx])):
+            self.data[indx][i] =  row.data[0][i]
+    
+    def setcolumn(self,col,indx):
+        for i in range(len(self.data)):
             self.data[i][indx] =  col.data[i][0]
     
     def __add__(self, other):
@@ -69,11 +73,16 @@ class Matrix():
                     self.data.append(list(map(int,line.split())))
         return self
     
-    def tofile(self,outputfile,mode):
-         with open(outputfile,mode) as f:
-            for line in self.data:
-                f.write(' '.join(list(map(str,line))) + '\n')
-    
+    def tofile(self,outputfile,mode,toint=False):
+        if toint:
+            with open(outputfile,mode) as f:
+                for line in self.data:
+                    f.write(' '.join(list(map(lambda x: str(round(x)),line))) + '\n')
+        else:
+            with open(outputfile,mode) as f:
+                for line in self.data:
+                    f.write(' '.join(list(map(str,line))) + '\n')
+
     def __mul__(self, other):
         if isinstance(other, int) or isinstance(other, float):
             result = [[other * x for x in y] for y in self.data]
@@ -93,6 +102,7 @@ class Matrix():
         if isinstance(other, int) or isinstance(other, float):
             result = [[x / other for x in y] for y in self.data]
             return Matrix(result)
+        raise 'only for nums!'
     
     def __rtruediv__(self, other):
         return self.__div__(other)
@@ -134,7 +144,7 @@ class Matrix():
         return (len(self.data), len(self.data[0]))
 def proj(a,b):
     if (a.shape()[0] != 1) or (a.shape() != b.shape()):
-        raise 
+        raise 'Only for vectors!'
     ab = (a*b.T()).data[0][0]
     bb = (b*b.T()).data[0][0]
     answer = (ab/bb)*b
