@@ -1,7 +1,34 @@
-import sys
+from sys import stdin
+from copy import deepcopy
 class Matrix():
-    def __init__(self):
-        self.data = []
+    def __init__(self, list_of_lists=None):
+        if list_of_lists:
+            self.data = deepcopy(list_of_lists)
+        else:
+            self.data = [[]]
+        
+    def __str__(self):
+        return '\n'.join(' '.join(map(str, row))
+                         for row in self.data)
+    def __getitem__(self, idx):
+        return self.data[idx]
+
+    def __repr__(self):
+        return 'Matrix(' + self.data.__repr__() + ')'
+    
+    def __add__(self, other):
+        other = Matrix(other)
+        result = []
+        numbers = []
+        for i in range(len(self.data)):
+            for j in range(len(self.data[0])):
+                summa = other[i][j] + self.data[i][j]
+                numbers.append(summa)
+                if len(numbers) == len(self.data):
+                    result.append(numbers)
+                    numbers = []
+        return Matrix(result)
+    
     def fromfile(self,inputfile):
         self.data = []
         with open(inputfile,'r') as f:
@@ -9,13 +36,27 @@ class Matrix():
                 if len(list(map(int,line.split()))) != 0:
                     self.data.append(list(map(int,line.split())))
         return self
-    def tofile(self,outputfile,ty):
-         with open(outputfile,ty) as f:
+    
+    def tofile(self,outputfile,mode):
+         with open(outputfile,mode) as f:
             for line in self.data:
                 f.write(' '.join(list(map(str,line))) + '\n')
-    def fromlist(self,l):
-        self.data = l
-        return self
+    
+    def __mul__(self, other):
+        if isinstance(other, int) or isinstance(other, float):
+            result = [[other * x for x in y] for y in self.data]
+            return Matrix(result)
+        if self.shape()[1] != other.shape()[0]:
+            raise ValueError('Incorrect dimension')
+        l = []
+        for _ in range(len(self.data)):
+            l.append(len(other.data[0])*[0])
+        for i in range(len(l)):
+            for j in range(len(l[0])):
+                for k in range(len(other.data)):
+                    l[i][j] += self.data[i][k]*other.data[k][j]
+        return Matrix(l)
+    
     def T(self):
         l = []
         for _ in range(len(self.data[0])):
@@ -23,15 +64,7 @@ class Matrix():
         for i in range(len(self.data)):
             for j in range(len(self.data[0])):
                 l[j][i] = self.data[i][j]
-        return Matrix().fromlist(l)
-    def dot(self,b):
-        l = []
-        for _ in range(len(self.data)):
-            l.append(len(b.data[0])*[0][:])
-        for i in range(len(l)):
-            for j in range(len(l[0])):
-                for k in range(len(b.data[0])):
-                    l[i][j] += self.data[i][k]*b.data[k][j]
-        return Matrix().fromlist(l)
-    def show(self,file=sys.stdout):
-        print(self.data,file=file)
+        return Matrix(l)
+
+    def shape(self):
+        return (len(self.data), len(self.data[0]))
