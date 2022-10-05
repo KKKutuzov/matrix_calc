@@ -1,1 +1,1 @@
-## Python practics with matrix
+## Наивная реализация класса матриц на Python
