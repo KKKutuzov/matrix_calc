@@ -8,7 +8,8 @@ class Matrix():
             self.data = [[]]
         
     def __str__(self):
-        return 'my_str'
+        return '\n'.join(' '.join(map(str, row))
+                         for row in self.data)
     def __getitem__(self, idx):
         return self.data[idx]
 
