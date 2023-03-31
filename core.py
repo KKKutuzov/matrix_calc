@@ -1,4 +1,3 @@
-from sys import stdin
 import math
 from copy import deepcopy
 class Matrix():
@@ -9,7 +8,10 @@ class Matrix():
             self.data = [[]]
         
     def __str__(self):
-        return '\n'.join(' '.join(map(str, row))
+        if len(self.data) > 2:
+            return 'a'
+        else:
+            return '\n'.join(' '.join(map(str, row))
                          for row in self.data)
     def __getitem__(self, idx):
         return self.data[idx]
