@@ -127,10 +127,6 @@ class Matrix():
                 l[j][i] = self.data[i][j]
         return Matrix(l)
     
-    def new_func2(self):
-        return 1
-    def new_func(self):
-        pass
     def gram_sch(self):
         l = []
         for _ in range(len(a.data)):
